@@ -1,0 +1,241 @@
+Necesito que prepares mi archivo `index.html` para subir mi proyecto a PRODUCCIÓN.
+
+IMPORTANTE: **NO quiero que reconstruyas el proyecto desde cero, NO quiero que cambies la lógica existente y NO quiero que cambies el diseño visual.**
+
+## OBJETIVO PRINCIPAL
+
+Revisa y modifica únicamente lo necesario para que mi `index.html` quede correctamente preparado para producción y funcione con mi configuración actual de **Supabase**.
+
+El proyecto actualmente funciona y tiene lógica ya implementada. Tu trabajo es hacer una **adaptación técnica para producción**, no rediseñar ni refactorizar arbitrariamente.
+
+## REGLAS OBLIGATORIAS
+
+### 1. NO cambiar la lógica
+
+Conserva exactamente el comportamiento actual de:
+
+* Login.
+* Registro.
+* Cierre de sesión.
+* Persistencia de sesión.
+* Perfil de estudiante.
+* Perfil de docente.
+* Nombre y apellido.
+* Grado y sección.
+* Preguntas.
+* Tests.
+* Evaluaciones.
+* Simulacros.
+* Materiales de aprendizaje.
+* Contenidos.
+* Resultados.
+* Intentos.
+* Roles.
+* Permisos.
+* Filtrado por grado.
+* Filtrado por sección.
+* Todas las funciones conectadas a Supabase.
+
+No elimines funciones que actualmente funcionan.
+
+No reemplaces Supabase por `localStorage`, Firebase, IndexedDB ni ninguna otra solución.
+
+### 2. NO cambiar el diseño
+
+Conserva exactamente el diseño visual actual:
+
+* Colores.
+* Gradientes.
+* Tipografías.
+* Tamaños.
+* Espaciados.
+* Botones.
+* Tarjetas.
+* Menús.
+* Modales.
+* Formularios.
+* Iconos.
+* Animaciones.
+* Responsive.
+* Estructura visual.
+* Clases CSS existentes.
+
+**NO hagas un rediseño.**
+
+Si encuentras código CSS que puede mejorarse técnicamente, no lo modifiques si hacerlo puede alterar la apariencia actual.
+
+### 3. Supabase
+
+Verifica que la conexión con Supabase esté correctamente preparada para producción.
+
+Revisa:
+
+* URL de Supabase.
+* Anon/Public key.
+* Inicialización del cliente Supabase.
+* Importación correcta de la librería de Supabase.
+* Uso correcto de `supabase.auth`.
+* Sesiones.
+* Consultas a tablas.
+* Inserciones.
+* Actualizaciones.
+* Eliminaciones.
+* Storage.
+* Manejo de usuarios autenticados.
+* Manejo de errores.
+* Variables o configuraciones necesarias para producción.
+
+**Nunca expongas una `service_role key` en el frontend.**
+
+Si el proyecto utiliza una clave pública/anon, mantenla como corresponde para una aplicación frontend.
+
+Si detectas credenciales que NO deberían estar en `index.html`, señálalo claramente en lugar de inventar una solución.
+
+### 4. Producción
+
+Comprueba que el archivo pueda ejecutarse correctamente fuera de Live Server.
+
+Revisa especialmente:
+
+* Rutas relativas.
+* Archivos JS.
+* Archivos CSS.
+* Imágenes.
+* Fuentes.
+* Iconos.
+* Imports.
+* Scripts externos.
+* URLs absolutas/relativas.
+* Dependencias CDN.
+* Errores que solamente aparecerían al desplegar.
+* Referencias a `localhost`.
+* Referencias a `127.0.0.1`.
+* Rutas propias de desarrollo.
+* Código de prueba.
+* Datos demo.
+* Datos ficticios.
+* Consolas de depuración innecesarias.
+
+Si encuentras referencias a `localhost` o desarrollo, corrígelas únicamente cuando sea necesario para producción y sin cambiar la funcionalidad.
+
+### 5. Seguridad
+
+Haz una revisión básica de seguridad del frontend.
+
+Busca:
+
+* Claves privadas expuestas.
+* `service_role`.
+* Contraseñas escritas directamente en el código.
+* Tokens hardcodeados.
+* Datos sensibles.
+* Credenciales de prueba.
+* Consultas inseguras.
+* Uso incorrecto de HTML dinámico.
+* Posibles problemas de XSS.
+* Manejo incorrecto de sesiones.
+* Información sensible mostrada innecesariamente.
+
+No rompas ninguna función existente para intentar "mejorar" la seguridad.
+
+Si una corrección de seguridad requiere modificar Supabase, RLS, políticas o configuración externa, **NO inventes ni modifiques eso desde `index.html`**. Indícame exactamente qué debería cambiarse fuera del archivo.
+
+### 6. NO inventar información
+
+No inventes:
+
+* URLs de Supabase.
+* Keys.
+* nombres de tablas.
+* nombres de columnas.
+* IDs.
+* buckets.
+* políticas RLS.
+* variables de entorno.
+* funciones que no existen.
+
+Utiliza exclusivamente la información que ya existe en el proyecto.
+
+### 7. Código
+
+Antes de modificar el archivo:
+
+1. Analiza completamente `index.html`.
+2. Identifica todas sus dependencias.
+3. Identifica cómo se conecta con Supabase.
+4. Identifica qué partes corresponden a desarrollo y cuáles a producción.
+5. Identifica posibles errores.
+6. Comprueba que no haya funciones duplicadas o referencias rotas.
+7. Comprueba que los eventos sigan funcionando.
+
+Después realiza únicamente los cambios necesarios.
+
+### 8. No hacer refactorización innecesaria
+
+NO conviertas todo el proyecto a otro framework.
+
+NO cambies HTML por React.
+
+NO cambies JavaScript por TypeScript.
+
+NO cambies Supabase.
+
+NO reorganices todo el código solamente por estética.
+
+NO elimines código funcional porque "podría hacerse mejor".
+
+NO cambies nombres de funciones, IDs o clases si no es estrictamente necesario.
+
+NO cambies la estructura de datos.
+
+NO cambies la base de datos.
+
+NO cambies la lógica de negocio.
+
+## CRITERIO DE ACEPTACIÓN
+
+Al finalizar, `index.html` debe:
+
+* Mantener exactamente la misma apariencia.
+* Mantener la misma lógica.
+* Mantener las mismas funcionalidades.
+* Seguir utilizando Supabase.
+* Estar preparado para ejecutarse en producción.
+* No depender de `localhost`.
+* No depender de datos demo.
+* No depender de `localStorage` para sustituir la base de datos.
+* No contener credenciales privadas.
+* Tener correctamente cargadas sus dependencias.
+* Tener rutas válidas.
+* No presentar errores evidentes de JavaScript que impidan el funcionamiento.
+
+## MUY IMPORTANTE
+
+Si para que el proyecto funcione correctamente en producción hace falta modificar otros archivos además de `index.html`, **NO los modifiques automáticamente**.
+
+Primero dime:
+
+1. Qué archivo necesita modificación.
+2. Por qué.
+3. Qué problema solucionaría.
+4. Si la modificación es obligatoria o recomendable.
+
+Si todo puede solucionarse desde `index.html`, modifica solamente `index.html`.
+
+## ENTREGA
+
+Después de analizar y modificar el archivo:
+
+1. Entrégame el `index.html` completo y corregido.
+2. No me entregues fragmentos.
+3. No omitas partes del código.
+4. No uses `...`.
+5. Mantén todas las funcionalidades existentes.
+6. Indica al final una lista breve de los cambios realizados.
+7. Indica cualquier configuración que todavía deba hacerse en Supabase o en el hosting antes de publicar.
+
+**Prioridad absoluta:**
+
+FUNCIONALIDAD ACTUAL > COMPATIBILIDAD CON PRODUCCIÓN > SEGURIDAD > LIMPIEZA DEL CÓDIGO.
+
+El diseño visual y la lógica existente deben permanecer intactos.
