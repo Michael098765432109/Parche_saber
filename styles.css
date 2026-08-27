@@ -64,6 +64,13 @@
   .auth-error{color:var(--danger)}
   @media(max-width:700px){.row-actions .btn{flex:1}}
 
+/* Menú lateral: se controla con body.sidebar-open en pantallas táctiles. */
+@media (max-width:900px){
+  #sidebar{inset:0 auto 0 0;width:min(82vw,320px);transform:translateX(-105%);visibility:hidden;pointer-events:none;box-shadow:18px 0 36px rgba(4,10,24,.34);transition:transform .22s ease,visibility 0s linear .22s!important}
+  body.sidebar-open #sidebar{transform:translateX(0)!important;visibility:visible;pointer-events:auto;transition:transform .22s ease!important}
+  #navMobileBtn{position:relative;z-index:41;touch-action:manipulation}
+}
+
 #authScreen{min-height:100vh;padding:28px;display:grid;place-items:center;background:radial-gradient(circle at 8% 8%,color-mix(in srgb,var(--blue-400) 18%,transparent),transparent 30%),radial-gradient(circle at 92% 90%,color-mix(in srgb,var(--blue-300) 14%,transparent),transparent 32%),var(--bg)}
 .auth-shell{width:min(1180px,100%);min-height:700px;display:grid;grid-template-columns:minmax(0,1.08fr) minmax(390px,.72fr);background:var(--card);border:1px solid var(--line);border-radius:30px;overflow:hidden;box-shadow:var(--shadow-lg)}
 .auth-hero{position:relative;padding:38px 42px 30px;display:flex;flex-direction:column;justify-content:space-between;color:#fff;background:radial-gradient(circle at 75% 16%,rgba(120,160,244,.24),transparent 22%),radial-gradient(circle at 10% 85%,rgba(82,125,229,.18),transparent 25%),linear-gradient(145deg,#122f80 0%,#0b2058 52%,#07142f 100%);overflow:hidden}

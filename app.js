@@ -146,11 +146,14 @@ function setupMobileSidebar(){
   const button=document.getElementById('navMobileBtn');
   const closeButton=document.getElementById('sidebarCloseBtn');
   const navList=document.getElementById('navList');
+  if(!button||button.dataset.mobileSidebarBound==='true')return;
+  button.dataset.mobileSidebarBound='true';
   if(button)button.onclick=()=>setMobileSidebar(!document.body.classList.contains('sidebar-open'));
   if(closeButton)closeButton.onclick=()=>setMobileSidebar(false);
   if(navList)navList.addEventListener('click',()=>setMobileSidebar(false));
   document.addEventListener('keydown',event=>{if(event.key==='Escape')setMobileSidebar(false)});
 }
+setupMobileSidebar();
 function showView(id,params={}){currentView=id;renderNav();const host=document.getElementById('viewsHost');host.innerHTML='';const v=document.createElement('section');v.className='view';host.appendChild(v);const fn=RENDERERS[id];if(!fn){v.innerHTML='<div class="empty-state">Vista no encontrada.</div>';return}fn(v,params)}
 function updateSidebar(){if(!CURRENT_USER)return;document.getElementById('roleFlag').textContent=CURRENT_USER.role==='teacher'?'Panel Docente':`Estudiante${PROGRESS.grade_id?' · Grado '+normalizeGradeName(PROGRESS.grade_id):''}`;document.getElementById('levelMini').classList.toggle('hidden',CURRENT_USER.role==='teacher');if(CURRENT_USER.role==='student'){const l=getLevel(PROGRESS.xp||0);document.getElementById('lmLabel').textContent=`Nivel ${l.index+1} · ${l.name}`;document.getElementById('lmXP').textContent=`${PROGRESS.xp||0} XP`;const pct=l.next?Math.min(100,Math.round(((PROGRESS.xp-l.min)/(l.next.min-l.min))*100)):100;document.getElementById('lmFill').style.width=pct+'%'};document.getElementById('topName').textContent=fullProfileName();document.getElementById('topRole').textContent=CURRENT_USER.role==='teacher'?'Docente':`Nivel ${(getLevel(PROGRESS.xp||0).index+1)}`;loadAvatarInto(document.getElementById('topAvatar'))}
 async function loadAvatarInto(el){if(!PROFILE?.avatar_url){el.textContent=fullProfileName().charAt(0).toUpperCase();return}const url=await getSignedUrl(BUCKETS.avatar,PROFILE.avatar_url);if(url)el.innerHTML=`<img alt="Foto de perfil" src="${url}">`;else el.textContent=fullProfileName().charAt(0).toUpperCase()}
