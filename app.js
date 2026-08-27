@@ -146,13 +146,24 @@ function setMobileSidebar(open){
 }
 function setupMobileSidebar(){
   const button=document.getElementById('navMobileBtn');
+  const fallbackButton=document.getElementById('navMobileFallback');
   const closeButton=document.getElementById('sidebarCloseBtn');
+  const fallbackCloseButton=document.getElementById('sidebarCloseFallback');
   const navList=document.getElementById('navList');
   const toggle=document.getElementById('sidebarToggle');
   if(!button||button.dataset.mobileSidebarBound==='true')return;
   button.dataset.mobileSidebarBound='true';
-  if(button)button.onclick=()=>setMobileSidebar(!document.body.classList.contains('sidebar-open'));
+  const toggleSidebar=event=>{
+    event?.preventDefault();
+    setMobileSidebar(!document.body.classList.contains('sidebar-open'));
+  };
+  if(button)button.onclick=toggleSidebar;
+  if(fallbackButton)fallbackButton.onclick=toggleSidebar;
   if(closeButton)closeButton.onclick=()=>setMobileSidebar(false);
+  if(fallbackCloseButton)fallbackCloseButton.onclick=event=>{
+    event.preventDefault();
+    setMobileSidebar(false);
+  };
   if(navList)navList.addEventListener('click',()=>setMobileSidebar(false));
   if(toggle)toggle.addEventListener('change',()=>setMobileSidebar(toggle.checked));
   document.addEventListener('keydown',event=>{if(event.key==='Escape')setMobileSidebar(false)});
