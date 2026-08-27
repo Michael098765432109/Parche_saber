@@ -582,6 +582,7 @@ document.getElementById('modalBackdrop').onclick=e=>{if(e.target.id==='modalBack
       await reloadContent();
       document.getElementById('authScreen').classList.add('hidden');
       document.getElementById('app').classList.remove('hidden');
+      document.body.classList.remove('auth-active');
       updateSidebar();
       renderNav();
       let route=routeOverride,params={};
@@ -594,6 +595,7 @@ document.getElementById('modalBackdrop').onclick=e=>{if(e.target.id==='modalBack
       CURRENT_USER=null;PROFILE=null;PROGRESS=defaultProgress();
       document.getElementById('app').classList.add('hidden');
       document.getElementById('authScreen').classList.remove('hidden');
+      document.body.classList.add('auth-active');
       v4Toast(friendly(e?.message,'No pudimos cargar tu cuenta. Inténtalo nuevamente.'),'error');
       throw e;
     }
@@ -603,7 +605,7 @@ document.getElementById('modalBackdrop').onclick=e=>{if(e.target.id==='modalBack
     try{await supabaseClient.auth.signOut()}catch(e){console.error(e)}
     CURRENT_USER=null;PROFILE=null;PROGRESS=defaultProgress();
     try{sessionStorage.removeItem(V4_ROUTE_KEY);sessionStorage.removeItem(V4_PARAMS_KEY)}catch{}
-    document.getElementById('app').classList.add('hidden');document.getElementById('authScreen').classList.remove('hidden');
+    document.getElementById('app').classList.add('hidden');document.getElementById('authScreen').classList.remove('hidden');document.body.classList.add('auth-active');
     document.getElementById('loginForm')?.reset();
   }
 
@@ -641,7 +643,7 @@ document.getElementById('modalBackdrop').onclick=e=>{if(e.target.id==='modalBack
     document.getElementById('regPassword')?.addEventListener('input',e=>{const hint=document.getElementById('regPasswordHint');const ok=validPassword(e.target.value);if(hint){hint.textContent=ok?'✓ Contraseña segura.':'Mínimo 8 caracteres, una mayúscula, una minúscula y un número.';hint.style.color=ok?'var(--ok)':'var(--ink-soft)'}});
     document.getElementById('loginForm').onsubmit=async e=>{e.preventDefault();const box=document.getElementById('loginError');box.innerHTML='';const btn=e.currentTarget.querySelector('button[type="submit"]');btn.disabled=true;try{const email=document.getElementById('loginEmail').value.trim();const password=document.getElementById('loginPassword').value;if(!email||!password)throw new Error('missing');const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});if(error)throw error;if(!data.user)throw new Error('missing-user');if(!data.user.email_confirmed_at){await supabaseClient.auth.signOut();notify('Correo sin verificar','Debes confirmar tu correo electrónico antes de usar Parche Saber. Revisa tu bandeja de entrada.','warning');return}await loginUser(data.user)}catch(err){console.error('Login:',err);box.innerHTML=`<div class="auth-error">${esc(userFriendlyError(err,'Correo o contraseña incorrectos.'))}</div>`}finally{btn.disabled=false}};
     document.getElementById('registerForm').onsubmit=async e=>{e.preventDefault();const box=document.getElementById('registerError');box.innerHTML='';const btn=e.currentTarget.querySelector('button[type="submit"]');btn.disabled=true;try{const name=document.getElementById('regName').value.trim();const lastName=document.getElementById('regLastName').value.trim();const email=document.getElementById('regEmail').value.trim();const password=document.getElementById('regPassword').value;const terms=document.getElementById('termsCheck')?.checked;if(!terms)throw new Error('terms');if(!name)throw new Error('Completa tu nombre para continuar.');if(!lastName)throw new Error('Completa tu apellido para continuar.');if(!validPersonName(name))throw new Error('El nombre solo puede contener letras y espacios.');if(!validPersonName(lastName))throw new Error('El apellido solo puede contener letras y espacios.');if(name.length>40||lastName.length>40)throw new Error('El nombre y el apellido pueden tener máximo 40 caracteres cada uno.');if(!email)throw new Error('Completa tu correo para continuar.');if(!validPassword(password))throw new Error('La contraseña debe tener mínimo 8 caracteres, una mayúscula, una minúscula y un número.');const grade_id=regRole==='student'?document.getElementById('regGrade').value:null;const section=regRole==='student'?document.getElementById('regSection').value:null;if(regRole==='student'&&(!grade_id||!SECTIONS.includes(section)))throw new Error('Selecciona un grado y una sección válida.');const fullName=`${name} ${lastName}`.trim();const {data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{name:fullName,first_name:name,last_name:lastName,role:regRole,grade_id,section}}});if(error)throw error;if(!data.user)throw new Error('No se pudo crear la cuenta.');if(data.session&&data.user.email_confirmed_at){await loginUser(data.user,'inicio')}else{notify('Cuenta creada','Te enviamos un correo de confirmación. Confirma tu correo antes de iniciar sesión.','success');setAuthMode('login')}}catch(err){console.error('Registro:',err);const msg=String(err?.message||'');box.innerHTML=`<div class="auth-error">${esc(msg==='terms'?'Debes aceptar la información de privacidad para crear la cuenta.':userFriendlyError(err,'No se pudo crear la cuenta.'))}</div>`}finally{btn.disabled=false}};
-    supabaseClient.auth.onAuthStateChange((event,session)=>{if(event==='SIGNED_OUT'){CURRENT_USER=null;PROFILE=null;return}if(session?.user&&!CURRENT_USER&&session.user.email_confirmed_at)setTimeout(()=>loginUser(session.user),0)});
+    supabaseClient.auth.onAuthStateChange((event,session)=>{if(event==='SIGNED_OUT'){CURRENT_USER=null;PROFILE=null;document.body.classList.add('auth-active');return}if(session?.user&&!CURRENT_USER&&session.user.email_confirmed_at)setTimeout(()=>loginUser(session.user),0)});
     supabaseClient.auth.getSession().then(({data})=>{if(data.session?.user&&data.session.user.email_confirmed_at)loginUser(data.session.user);else if(data.session?.user&&!data.session.user.email_confirmed_at)supabaseClient.auth.signOut()}).catch(e=>console.error(e));
   }
 
