@@ -139,6 +139,8 @@ function guarded(action){if(examGuard&&examGuard()){confirmBox('¿Salir de la ev
 function setMobileSidebar(open){
   const isOpen=Boolean(open);
   document.body.classList.toggle('sidebar-open',isOpen);
+  const toggle=document.getElementById('sidebarToggle');
+  if(toggle)toggle.checked=isOpen;
   const button=document.getElementById('navMobileBtn');
   if(button)button.setAttribute('aria-expanded',String(isOpen));
 }
@@ -146,11 +148,13 @@ function setupMobileSidebar(){
   const button=document.getElementById('navMobileBtn');
   const closeButton=document.getElementById('sidebarCloseBtn');
   const navList=document.getElementById('navList');
+  const toggle=document.getElementById('sidebarToggle');
   if(!button||button.dataset.mobileSidebarBound==='true')return;
   button.dataset.mobileSidebarBound='true';
   if(button)button.onclick=()=>setMobileSidebar(!document.body.classList.contains('sidebar-open'));
   if(closeButton)closeButton.onclick=()=>setMobileSidebar(false);
   if(navList)navList.addEventListener('click',()=>setMobileSidebar(false));
+  if(toggle)toggle.addEventListener('change',()=>setMobileSidebar(toggle.checked));
   document.addEventListener('keydown',event=>{if(event.key==='Escape')setMobileSidebar(false)});
 }
 setupMobileSidebar();
