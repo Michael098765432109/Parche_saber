@@ -145,15 +145,19 @@ function setMobileSidebar(open){
 function setupMobileSidebar(){
   const button=document.getElementById('navMobileBtn');
   const closeButton=document.getElementById('sidebarCloseBtn');
+  const overlay=document.getElementById('sidebarOverlay');
   const navList=document.getElementById('navList');
-  if(!button||button.dataset.mobileSidebarBound==='true')return;
+  if(!button)return;
+  // Permite re-binding al llamarse después del login
   button.dataset.mobileSidebarBound='true';
+  button.onclick=null;
   const toggleSidebar=event=>{
     event?.preventDefault();
     setMobileSidebar(!document.body.classList.contains('sidebar-open'));
   };
-  button.onclick=toggleSidebar;
-  if(closeButton)closeButton.onclick=()=>setMobileSidebar(false);
+  button.addEventListener('click',toggleSidebar,{passive:false});
+  if(closeButton){closeButton.onclick=null;closeButton.addEventListener('click',()=>setMobileSidebar(false),{passive:false});}
+  if(overlay){overlay.onclick=null;overlay.addEventListener('click',()=>setMobileSidebar(false),{passive:false});}
   if(navList)navList.addEventListener('click',()=>setMobileSidebar(false));
   document.addEventListener('keydown',event=>{if(event.key==='Escape')setMobileSidebar(false)});
 }
@@ -600,6 +604,7 @@ document.getElementById('modalBackdrop').onclick=e=>{if(e.target.id==='modalBack
       await reloadContent();
       document.getElementById('authScreen').classList.add('hidden');
       document.getElementById('app').classList.remove('hidden');
+      setupMobileSidebar();
       updateSidebar();
       renderNav();
       let route=routeOverride,params={};
@@ -1392,7 +1397,7 @@ window.addEventListener('error',e=>console.error('Saber:',e.error||e.message));
     return baseShow(id,params);
   };
   globalThis.showView=showView;
-  if(typeof setupMobileSidebar==='function')setupMobileSidebar();
+  if(typeof setupMobileSidebar==='function'){setupMobileSidebar();}
   if(typeof renderNav==='function')renderNav();
   console.info('Saber: implementación única final cargada.');
 })();
