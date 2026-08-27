@@ -139,24 +139,11 @@ function guarded(action){if(examGuard&&examGuard()){confirmBox('¿Salir de la ev
 function setMobileSidebar(open){
   const isOpen=Boolean(open);
   document.body.classList.toggle('sidebar-open',isOpen);
-  const sidebar=document.getElementById('sidebar');
-  if(sidebar&&window.matchMedia('(max-width: 900px)').matches){
-    sidebar.style.setProperty('display',isOpen?'flex':'none','important');
-    sidebar.style.visibility=isOpen?'visible':'hidden';
-    sidebar.style.pointerEvents=isOpen?'auto':'none';
-  }else if(sidebar){
-    sidebar.style.removeProperty('display');
-    sidebar.style.removeProperty('left');
-    sidebar.style.removeProperty('transform');
-    sidebar.style.removeProperty('visibility');
-    sidebar.style.removeProperty('pointer-events');
-  }
   const button=document.getElementById('navMobileBtn');
   if(button)button.setAttribute('aria-expanded',String(isOpen));
 }
 function setupMobileSidebar(){
   const button=document.getElementById('navMobileBtn');
-  const directButton=document.getElementById('navMobileDirect');
   const closeButton=document.getElementById('sidebarCloseBtn');
   const navList=document.getElementById('navList');
   if(!button||button.dataset.mobileSidebarBound==='true')return;
@@ -166,7 +153,6 @@ function setupMobileSidebar(){
     setMobileSidebar(!document.body.classList.contains('sidebar-open'));
   };
   button.onclick=toggleSidebar;
-  if(directButton)directButton.onclick=toggleSidebar;
   if(closeButton)closeButton.onclick=()=>setMobileSidebar(false);
   if(navList)navList.addEventListener('click',()=>setMobileSidebar(false));
   document.addEventListener('keydown',event=>{if(event.key==='Escape')setMobileSidebar(false)});
