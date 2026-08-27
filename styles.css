@@ -93,8 +93,8 @@
   z-index:1100;
   background:rgba(0,0,0,.45);
   cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
 }
-body.sidebar-open #sidebarOverlay{display:block;}
 
 @media(max-width:900px){
   /* muestra el botón hamburguesa */
