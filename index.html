@@ -11,7 +11,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
-<link rel="stylesheet" href="./styles.css?v=mobile-menu-4">
+<link rel="stylesheet" href="./styles.css?v=mobile-menu-5">
 </head>
 <body>
 <div id="authScreen">
@@ -44,6 +44,7 @@
   </aside>
   <main id="main">
     <div class="topbar">
+      <button id="navMobileDirect" class="iconbtn" type="button" aria-label="Abrir menu de navegacion" onclick="var s=document.getElementById('sidebar'),o=s.style.display!=='flex';s.style.setProperty('display',o?'flex':'none','important');s.style.setProperty('visibility',o?'visible':'hidden','important');s.style.setProperty('pointer-events',o?'auto':'none','important');s.style.setProperty('transform',o?'translateX(0)':'translateX(-105%)','important');">&#9776;</button>
       <button id="navMobileBtn" class="iconbtn" type="button" aria-label="Abrir o cerrar menú de navegación" aria-expanded="false">☰</button>
       <div class="searchbox"><span class="search-icon">🔎</span><input id="globalSearch" placeholder="Buscar materias, temas, preguntas, tests…"><div id="searchResults"></div></div>
       <button id="themeBtn" class="iconbtn">Tema: Claro</button>
@@ -61,6 +62,6 @@
      No depende de reloadContent() para estas vistas.
      ============================================================ -->
 <script src="./config.js"></script>
-<script src="./app.js?v=mobile-menu-4"></script>
+<script src="./app.js?v=mobile-menu-5"></script>
 </body>
 </html>
