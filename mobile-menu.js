@@ -24,8 +24,7 @@
     document.body.classList.contains('sidebar-open') ? close() : open();
   }
 
-  // touchstart para eliminar el delay de 300ms en Android
-  btn.addEventListener('touchstart', toggle, { passive: false });
+  // Un solo evento evita que los dispositivos táctiles ejecuten toggle dos veces.
   btn.addEventListener('click', toggle);
 
   overlay.addEventListener('touchstart', function (e) { e.preventDefault(); close(); }, { passive: false });
