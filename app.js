@@ -134,10 +134,11 @@ function renderGradeOptions(selected=''){const opts=GRADES.length?GRADES:GRADES_
 
 const STUDENT_NAV=[['inicio','🏠','Inicio'],['materias','📚','Mis materias'],['repaso','🔁','Repasar errores'],['simulacro','⏱️','Simulacro Saber 11'],['progreso','📈','Progreso'],['logros','🏆','Logros'],['perfil','👤','Perfil']];
 const TEACHER_NAV=[['tInicio','🏠','Inicio'],['tTemas','🧠','Temas'],['tPapelera','🗑️','Papelera'],['tMaterial','📄','Material de aprendizaje'],['tPreguntas','❓','Banco de preguntas'],['tEvaluaciones','📝','Evaluaciones'],['tResultados','📊','Resultados'],['tPerfil','👤','Perfil']];
-function renderNav(){const list=document.getElementById('navList');const nav=CURRENT_USER?.role==='teacher'?TEACHER_NAV:STUDENT_NAV;list.innerHTML=nav.map(([id,icon,label])=>`<button class="navbtn ${id===currentView?'active':''}" data-nav="${id}"><span>${icon}</span>${esc(label)}</button>`).join('');list.querySelectorAll('.navbtn').forEach(b=>b.onclick=()=>guarded(()=>{showView(b.dataset.nav);document.body.classList.remove('sidebar-open')}))}
+function renderNav(){const list=document.getElementById('navList');const nav=CURRENT_USER?.role==='teacher'?TEACHER_NAV:STUDENT_NAV;list.innerHTML=nav.map(([id,icon,label])=>`<button class="navbtn ${id===currentView?'active':''}" data-nav="${id}"><span>${icon}</span>${esc(label)}</button>`).join('');list.querySelectorAll('.navbtn').forEach(b=>b.onclick=()=>guarded(()=>{showView(b.dataset.nav);document.body.classList.remove('sidebar-open');}))}
 function guarded(action){if(examGuard&&examGuard()){confirmBox('¿Salir de la evaluación?','Tus respuestas no enviadas podrían perderse.').then(ok=>{if(ok){examGuard=null;action()}})}else action()}
 function setMobileSidebar(open){
-  document.body.classList.toggle('sidebar-open',Boolean(open));
+  if(open) { if(window.openMobileSidebar) window.openMobileSidebar(); else document.body.classList.add('sidebar-open'); }
+  else { if(window.closeMobileSidebar) window.closeMobileSidebar(); else document.body.classList.remove('sidebar-open'); }
 }
 function showView(id,params={}){currentView=id;renderNav();const host=document.getElementById('viewsHost');host.innerHTML='';const v=document.createElement('section');v.className='view';host.appendChild(v);const fn=RENDERERS[id];if(!fn){v.innerHTML='<div class="empty-state">Vista no encontrada.</div>';return}fn(v,params)}
 function updateSidebar(){if(!CURRENT_USER)return;document.getElementById('roleFlag').textContent=CURRENT_USER.role==='teacher'?'Panel Docente':`Estudiante${PROGRESS.grade_id?' · Grado '+normalizeGradeName(PROGRESS.grade_id):''}`;document.getElementById('levelMini').classList.toggle('hidden',CURRENT_USER.role==='teacher');if(CURRENT_USER.role==='student'){const l=getLevel(PROGRESS.xp||0);document.getElementById('lmLabel').textContent=`Nivel ${l.index+1} · ${l.name}`;document.getElementById('lmXP').textContent=`${PROGRESS.xp||0} XP`;const pct=l.next?Math.min(100,Math.round(((PROGRESS.xp-l.min)/(l.next.min-l.min))*100)):100;document.getElementById('lmFill').style.width=pct+'%'};document.getElementById('topName').textContent=fullProfileName();document.getElementById('topRole').textContent=CURRENT_USER.role==='teacher'?'Docente':`Nivel ${(getLevel(PROGRESS.xp||0).index+1)}`;loadAvatarInto(document.getElementById('topAvatar'))}
@@ -157,7 +158,7 @@ async function loginUser(user){
   renderNav();
   showView(CURRENT_USER.role==='teacher'?'tInicio':'inicio');
 }
-async function logout(){await supabaseClient.auth.signOut();CURRENT_USER=null;PROFILE=null;PROGRESS=defaultProgress();document.getElementById('app').classList.add('hidden');document.getElementById('authScreen').classList.remove('hidden');document.getElementById('loginForm').reset();}
+async function logout(){await supabaseClient.auth.signOut();CURRENT_USER=null;PROFILE=null;PROGRESS=defaultProgress();document.getElementById('app').classList.add('hidden');document.getElementById('authScreen').classList.remove('hidden');document.getElementById('loginForm').reset();if(window.closeMobileSidebar)window.closeMobileSidebar();}
 function openGradeModal(first=false){
   openModal(`
     <h3>${first?'Selecciona tu grado y sección':'Cambiar grado y sección'}</h3>
