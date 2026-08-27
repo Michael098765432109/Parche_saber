@@ -156,6 +156,7 @@ function setMobileSidebar(open){
 }
 function setupMobileSidebar(){
   const button=document.getElementById('navMobileBtn');
+  const directButton=document.getElementById('navMobileDirect');
   const closeButton=document.getElementById('sidebarCloseBtn');
   const navList=document.getElementById('navList');
   if(!button||button.dataset.mobileSidebarBound==='true')return;
@@ -165,6 +166,7 @@ function setupMobileSidebar(){
     setMobileSidebar(!document.body.classList.contains('sidebar-open'));
   };
   button.onclick=toggleSidebar;
+  if(directButton)directButton.onclick=toggleSidebar;
   if(closeButton)closeButton.onclick=()=>setMobileSidebar(false);
   if(navList)navList.addEventListener('click',()=>setMobileSidebar(false));
   document.addEventListener('keydown',event=>{if(event.key==='Escape')setMobileSidebar(false)});
