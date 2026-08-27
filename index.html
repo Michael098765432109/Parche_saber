@@ -11,7 +11,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
-<link rel="stylesheet" href="./styles.css?v=mobile-menu-3">
+<link rel="stylesheet" href="./styles.css?v=mobile-menu-4">
 </head>
 <body>
 <div id="authScreen">
@@ -36,18 +36,15 @@
     </section>
   </div>
 </div>
-<input id="sidebarToggle" class="sidebar-toggle" type="checkbox" aria-hidden="true">
 <div id="app" class="hidden">
-  <aside id="sidebar"><button id="sidebarCloseBtn" class="iconbtn" type="button" aria-label="Cerrar menú" style="display:none;position:absolute;right:10px;top:10px;z-index:2">✕</button><div class="brand"><div class="badge">🎒</div><div><h1>Parche Saber</h1><span class="eyebrow">Tu parche pa'l Saber 11°</span></div></div>
-    <label id="sidebarCloseFallback" class="iconbtn" for="sidebarToggle" aria-label="Cerrar menú">&#10005;</label>
+  <aside id="sidebar"><button id="sidebarCloseBtn" class="iconbtn" type="button" aria-label="Cerrar menú">✕</button><div class="brand"><div class="badge">🎒</div><div><h1>Parche Saber</h1><span class="eyebrow">Tu parche pa'l Saber 11°</span></div></div>
     <div class="role-flag" id="roleFlag">Estudiante</div>
     <div id="navList"></div>
     <button class="logoutBtn" id="logoutBtn">⏻ Cerrar sesión</button>
   </aside>
   <main id="main">
     <div class="topbar">
-      <label id="navMobileFallback" class="iconbtn" for="sidebarToggle" aria-label="Abrir o cerrar menú de navegación">&#9776;</label>
-      <button id="navMobileBtn" class="iconbtn">☰</button>
+      <button id="navMobileBtn" class="iconbtn" type="button" aria-label="Abrir o cerrar menú de navegación" aria-expanded="false">☰</button>
       <div class="searchbox"><span class="search-icon">🔎</span><input id="globalSearch" placeholder="Buscar materias, temas, preguntas, tests…"><div id="searchResults"></div></div>
       <button id="themeBtn" class="iconbtn">Tema: Claro</button>
       <button id="profileBtn" class="profile-chip"><span id="topAvatar" class="pc-avatar">E</span><span><span id="topName" class="pc-name">Usuario</span><br><span id="topRole" class="pc-level">Estudiante</span></span></button>
@@ -64,6 +61,6 @@
      No depende de reloadContent() para estas vistas.
      ============================================================ -->
 <script src="./config.js"></script>
-<script src="./app.js?v=mobile-menu-3"></script>
+<script src="./app.js?v=mobile-menu-4"></script>
 </body>
 </html>

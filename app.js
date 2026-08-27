@@ -139,33 +139,33 @@ function guarded(action){if(examGuard&&examGuard()){confirmBox('¿Salir de la ev
 function setMobileSidebar(open){
   const isOpen=Boolean(open);
   document.body.classList.toggle('sidebar-open',isOpen);
-  const toggle=document.getElementById('sidebarToggle');
-  if(toggle)toggle.checked=isOpen;
+  const sidebar=document.getElementById('sidebar');
+  if(sidebar&&window.matchMedia('(max-width: 900px)').matches){
+    sidebar.style.setProperty('left',isOpen?'0':'-105%','important');
+    sidebar.style.setProperty('transform','none','important');
+    sidebar.style.visibility=isOpen?'visible':'hidden';
+    sidebar.style.pointerEvents=isOpen?'auto':'none';
+  }else if(sidebar){
+    sidebar.style.removeProperty('transform');
+    sidebar.style.removeProperty('visibility');
+    sidebar.style.removeProperty('pointer-events');
+  }
   const button=document.getElementById('navMobileBtn');
   if(button)button.setAttribute('aria-expanded',String(isOpen));
 }
 function setupMobileSidebar(){
   const button=document.getElementById('navMobileBtn');
-  const fallbackButton=document.getElementById('navMobileFallback');
   const closeButton=document.getElementById('sidebarCloseBtn');
-  const fallbackCloseButton=document.getElementById('sidebarCloseFallback');
   const navList=document.getElementById('navList');
-  const toggle=document.getElementById('sidebarToggle');
   if(!button||button.dataset.mobileSidebarBound==='true')return;
   button.dataset.mobileSidebarBound='true';
   const toggleSidebar=event=>{
     event?.preventDefault();
     setMobileSidebar(!document.body.classList.contains('sidebar-open'));
   };
-  if(button)button.onclick=toggleSidebar;
-  if(fallbackButton)fallbackButton.onclick=toggleSidebar;
+  button.onclick=toggleSidebar;
   if(closeButton)closeButton.onclick=()=>setMobileSidebar(false);
-  if(fallbackCloseButton)fallbackCloseButton.onclick=event=>{
-    event.preventDefault();
-    setMobileSidebar(false);
-  };
   if(navList)navList.addEventListener('click',()=>setMobileSidebar(false));
-  if(toggle)toggle.addEventListener('change',()=>setMobileSidebar(toggle.checked));
   document.addEventListener('keydown',event=>{if(event.key==='Escape')setMobileSidebar(false)});
 }
 setupMobileSidebar();
