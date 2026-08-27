@@ -141,11 +141,12 @@ function setMobileSidebar(open){
   document.body.classList.toggle('sidebar-open',isOpen);
   const sidebar=document.getElementById('sidebar');
   if(sidebar&&window.matchMedia('(max-width: 900px)').matches){
-    sidebar.style.setProperty('left',isOpen?'0':'-105%','important');
-    sidebar.style.setProperty('transform','none','important');
+    sidebar.style.setProperty('display',isOpen?'flex':'none','important');
     sidebar.style.visibility=isOpen?'visible':'hidden';
     sidebar.style.pointerEvents=isOpen?'auto':'none';
   }else if(sidebar){
+    sidebar.style.removeProperty('display');
+    sidebar.style.removeProperty('left');
     sidebar.style.removeProperty('transform');
     sidebar.style.removeProperty('visibility');
     sidebar.style.removeProperty('pointer-events');
