@@ -137,31 +137,8 @@ const TEACHER_NAV=[['tInicio','🏠','Inicio'],['tTemas','🧠','Temas'],['tPape
 function renderNav(){const list=document.getElementById('navList');const nav=CURRENT_USER?.role==='teacher'?TEACHER_NAV:STUDENT_NAV;list.innerHTML=nav.map(([id,icon,label])=>`<button class="navbtn ${id===currentView?'active':''}" data-nav="${id}"><span>${icon}</span>${esc(label)}</button>`).join('');list.querySelectorAll('.navbtn').forEach(b=>b.onclick=()=>guarded(()=>{showView(b.dataset.nav);document.body.classList.remove('sidebar-open')}))}
 function guarded(action){if(examGuard&&examGuard()){confirmBox('¿Salir de la evaluación?','Tus respuestas no enviadas podrían perderse.').then(ok=>{if(ok){examGuard=null;action()}})}else action()}
 function setMobileSidebar(open){
-  const isOpen=Boolean(open);
-  document.body.classList.toggle('sidebar-open',isOpen);
-  const button=document.getElementById('navMobileBtn');
-  if(button)button.setAttribute('aria-expanded',String(isOpen));
+  document.body.classList.toggle('sidebar-open',Boolean(open));
 }
-function setupMobileSidebar(){
-  const button=document.getElementById('navMobileBtn');
-  const closeButton=document.getElementById('sidebarCloseBtn');
-  const overlay=document.getElementById('sidebarOverlay');
-  const navList=document.getElementById('navList');
-  if(!button)return;
-  // Permite re-binding al llamarse después del login
-  button.dataset.mobileSidebarBound='true';
-  button.onclick=null;
-  const toggleSidebar=event=>{
-    event?.preventDefault();
-    setMobileSidebar(!document.body.classList.contains('sidebar-open'));
-  };
-  button.addEventListener('click',toggleSidebar,{passive:false});
-  if(closeButton){closeButton.onclick=null;closeButton.addEventListener('click',()=>setMobileSidebar(false),{passive:false});}
-  if(overlay){overlay.onclick=null;overlay.addEventListener('click',()=>setMobileSidebar(false),{passive:false});}
-  if(navList)navList.addEventListener('click',()=>setMobileSidebar(false));
-  document.addEventListener('keydown',event=>{if(event.key==='Escape')setMobileSidebar(false)});
-}
-setupMobileSidebar();
 function showView(id,params={}){currentView=id;renderNav();const host=document.getElementById('viewsHost');host.innerHTML='';const v=document.createElement('section');v.className='view';host.appendChild(v);const fn=RENDERERS[id];if(!fn){v.innerHTML='<div class="empty-state">Vista no encontrada.</div>';return}fn(v,params)}
 function updateSidebar(){if(!CURRENT_USER)return;document.getElementById('roleFlag').textContent=CURRENT_USER.role==='teacher'?'Panel Docente':`Estudiante${PROGRESS.grade_id?' · Grado '+normalizeGradeName(PROGRESS.grade_id):''}`;document.getElementById('levelMini').classList.toggle('hidden',CURRENT_USER.role==='teacher');if(CURRENT_USER.role==='student'){const l=getLevel(PROGRESS.xp||0);document.getElementById('lmLabel').textContent=`Nivel ${l.index+1} · ${l.name}`;document.getElementById('lmXP').textContent=`${PROGRESS.xp||0} XP`;const pct=l.next?Math.min(100,Math.round(((PROGRESS.xp-l.min)/(l.next.min-l.min))*100)):100;document.getElementById('lmFill').style.width=pct+'%'};document.getElementById('topName').textContent=fullProfileName();document.getElementById('topRole').textContent=CURRENT_USER.role==='teacher'?'Docente':`Nivel ${(getLevel(PROGRESS.xp||0).index+1)}`;loadAvatarInto(document.getElementById('topAvatar'))}
 async function loadAvatarInto(el){if(!PROFILE?.avatar_url){el.textContent=fullProfileName().charAt(0).toUpperCase();return}const url=await getSignedUrl(BUCKETS.avatar,PROFILE.avatar_url);if(url)el.innerHTML=`<img alt="Foto de perfil" src="${url}">`;else el.textContent=fullProfileName().charAt(0).toUpperCase()}
@@ -604,7 +581,6 @@ document.getElementById('modalBackdrop').onclick=e=>{if(e.target.id==='modalBack
       await reloadContent();
       document.getElementById('authScreen').classList.add('hidden');
       document.getElementById('app').classList.remove('hidden');
-      setupMobileSidebar();
       updateSidebar();
       renderNav();
       let route=routeOverride,params={};
@@ -1397,7 +1373,6 @@ window.addEventListener('error',e=>console.error('Saber:',e.error||e.message));
     return baseShow(id,params);
   };
   globalThis.showView=showView;
-  if(typeof setupMobileSidebar==='function'){setupMobileSidebar();}
   if(typeof renderNav==='function')renderNav();
   console.info('Saber: implementación única final cargada.');
 })();
