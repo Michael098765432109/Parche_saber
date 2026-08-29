@@ -22,13 +22,27 @@
 <div id="sidebarOverlay"></div>
 
 <!-- Sidebar: también fuera de #app para que no herede display:none -->
-<aside id="sidebar">
-  <button id="sidebarCloseBtn" class="iconbtn" type="button" aria-label="Cerrar menú">✕</button>
-  <div class="brand"><div class="badge">🎒</div><div><h1>Parche Saber</h1><span class="eyebrow">Tu parche pa'l Saber 11°</span></div></div>
-  <div class="role-flag" id="roleFlag">Estudiante</div>
-  <div id="navList"></div>
-  <button class="logoutBtn" id="logoutBtn">⏻ Cerrar sesión</button>
-</aside>
+<div id="appShell">
+  <aside id="sidebar">
+    <button id="sidebarCloseBtn" class="iconbtn" type="button" aria-label="Cerrar menú">✕</button>
+    <div class="brand"><div class="badge">🎒</div><div><h1>Parche Saber</h1><span class="eyebrow">Tu parche pa'l Saber 11°</span></div></div>
+    <div class="role-flag" id="roleFlag">Estudiante</div>
+    <div id="navList"></div>
+    <button class="logoutBtn" id="logoutBtn">⏻ Cerrar sesión</button>
+  </aside>
+
+  <div id="app" class="hidden">
+    <main id="main">
+      <div class="topbar">
+        <button id="navMobileBtnSpacer" class="iconbtn" style="visibility:hidden;pointer-events:none" aria-hidden="true">☰</button>
+        <div class="searchbox"><span class="search-icon">🔎</span><input id="globalSearch" placeholder="Buscar materias, temas, preguntas, tests…"><div id="searchResults"></div></div>
+        <button id="themeBtn" class="iconbtn">Tema: Claro</button>
+        <button id="profileBtn" class="profile-chip"><span id="topAvatar" class="pc-avatar">E</span><span><span id="topName" class="pc-name">Usuario</span><br><span id="topRole" class="pc-level">Estudiante</span></span></button>
+      </div>
+      <div id="viewsHost"></div>
+    </main>
+  </div>
+</div>
 
 <div id="authScreen">
   <div class="auth-shell">
@@ -51,18 +65,6 @@
       <p class="auth-privacy">Al continuar, tus datos académicos se gestionan de forma separada por usuario y rol.</p>
     </section>
   </div>
-</div>
-
-<div id="app" class="hidden">
-  <main id="main">
-    <div class="topbar">
-      <button id="navMobileBtnSpacer" class="iconbtn" style="visibility:hidden;pointer-events:none" aria-hidden="true">☰</button>
-      <div class="searchbox"><span class="search-icon">🔎</span><input id="globalSearch" placeholder="Buscar materias, temas, preguntas, tests…"><div id="searchResults"></div></div>
-      <button id="themeBtn" class="iconbtn">Tema: Claro</button>
-      <button id="profileBtn" class="profile-chip"><span id="topAvatar" class="pc-avatar">E</span><span><span id="topName" class="pc-name">Usuario</span><br><span id="topRole" class="pc-level">Estudiante</span></span></button>
-    </div>
-    <div id="viewsHost"></div>
-  </main>
 </div>
 
 <div id="modalBackdrop" class="modal-backdrop"><div id="modalBox" class="modal-box"></div></div>
