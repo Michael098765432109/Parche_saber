@@ -1,4 +1,4 @@
-// mobile-menu.js v6
+// mobile-menu.js v7
 (function () {
   'use strict';
 
@@ -14,28 +14,39 @@
     return window.matchMedia('(max-width: 900px)').matches;
   }
 
+  // Única fuente de verdad: recalcula botón, overlay y aria-expanded
+  // a partir del estado real (clases del body), sin importar qué
+  // código haya tocado 'sidebar-open' (mobile-menu.js u otro script).
   function syncVisibility() {
-    var shouldHide = document.body.classList.contains('auth-active') || !isMobileView();
-    btn.setAttribute('aria-hidden', shouldHide ? 'true' : 'false');
-    btn.style.display = shouldHide ? 'none' : 'flex';
-    if (!isMobileView() && document.body.classList.contains('sidebar-open')) {
+    var authActive = document.body.classList.contains('auth-active');
+    var mobile = isMobileView();
+    var shouldHideBtn = authActive || !mobile;
+
+    btn.setAttribute('aria-hidden', shouldHideBtn ? 'true' : 'false');
+    btn.style.display = shouldHideBtn ? 'none' : 'flex';
+
+    var wantsOpen = document.body.classList.contains('sidebar-open');
+    var canBeOpen = wantsOpen && !authActive && mobile;
+
+    // Si algo dejó la clase puesta en un estado donde no debería
+    // (p. ej. login, o pasar a desktop), la limpiamos.
+    if (wantsOpen && !canBeOpen) {
       document.body.classList.remove('sidebar-open');
-      overlay.style.display = 'none';
-      btn.setAttribute('aria-expanded', 'false');
     }
+
+    overlay.style.display = canBeOpen ? 'block' : 'none';
+    btn.setAttribute('aria-expanded', canBeOpen ? 'true' : 'false');
   }
 
   function open() {
     if (document.body.classList.contains('auth-active') || !isMobileView()) return;
     document.body.classList.add('sidebar-open');
-    overlay.style.display = 'block';
-    btn.setAttribute('aria-expanded', 'true');
+    syncVisibility();
   }
 
   function close() {
     document.body.classList.remove('sidebar-open');
-    overlay.style.display = 'none';
-    btn.setAttribute('aria-expanded', 'false');
+    syncVisibility();
   }
 
   function toggle(e) {
@@ -79,14 +90,13 @@
     }
   });
 
-  window.addEventListener('resize', function () {
-    syncVisibility();
-    if (!isMobileView()) {
-      close();
-    }
-  });
+  window.addEventListener('resize', syncVisibility);
 
   if (window.MutationObserver) {
+    // Se dispara con CUALQUIER cambio de clase en el body, incluido
+    // cuando otro script (por ejemplo app.js al navegar) quita
+    // 'sidebar-open' directamente. Así el overlay y el aria-expanded
+    // nunca quedan desincronizados del sidebar real.
     var observer = new MutationObserver(function () {
       syncVisibility();
     });
