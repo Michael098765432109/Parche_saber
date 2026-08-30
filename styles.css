@@ -89,6 +89,12 @@ body:not(.auth-active) #appShell{display:flex}
   touch-action:manipulation;
   -webkit-tap-highlight-color:transparent;
 }
+body:not(.auth-active) #navMobileBtn{
+  display:flex;
+}
+body.auth-active #navMobileBtn{
+  display:none !important;
+}
 /* ── Overlay ── */
 #sidebarOverlay{
   display:none;
@@ -98,11 +104,11 @@ body:not(.auth-active) #appShell{display:flex}
   cursor:pointer;
   -webkit-tap-highlight-color:transparent;
 }
+body.sidebar-open #sidebarOverlay{
+  display:block;
+}
 
 @media(max-width:900px){
-  /* muestra el botón hamburguesa */
-  #navMobileBtn{display:flex;}
-  /* oculta el sidebar en desktop-sticky, lo convierte en drawer */
   #sidebar{
     position:fixed;
     inset:0 auto 0 0;
