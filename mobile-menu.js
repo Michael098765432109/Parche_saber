@@ -20,6 +20,8 @@
     btn.style.display = shouldHide ? 'none' : 'flex';
     if (!isMobileView() && document.body.classList.contains('sidebar-open')) {
       document.body.classList.remove('sidebar-open');
+      overlay.style.display = 'none';
+      btn.setAttribute('aria-expanded', 'false');
     }
   }
 
@@ -83,6 +85,16 @@
       close();
     }
   });
+
+  if (window.MutationObserver) {
+    var observer = new MutationObserver(function () {
+      syncVisibility();
+    });
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+  }
 
   syncVisibility();
 
